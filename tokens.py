@@ -9,6 +9,14 @@ class Tokens:
     RPAREN = ')'
     OP_LIST = (PLUS, MINUS, MUL, DIV)
 
+    BEGIN = 'BEGIN'
+    END = 'END'
+    ID = 'ID'
+    DOT = 'DOT'
+    ASSIGN = 'ASSIGN'
+    SEMI = 'SEMI'
+    
+
 class Token:
     def __init__(self, type, value):
         self.type = type

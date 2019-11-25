@@ -1,6 +1,11 @@
 from tokens import Token, Tokens
 
 
+RESERVED_KEYWORDS = {
+    'BEGIN': Token('BEGIN', 'BEGIN'),
+    'END': Token('END', 'END'),
+}
+
 class Lexer:
     def __init__(self, text):
         self.text = text
@@ -20,6 +25,21 @@ class Lexer:
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
+
+    def peek(self):
+        peek_pos = self.pos + 1
+        if peek_pos > len(self.text) - 1:
+            return None
+        else:
+            return self.text[peek_pos]
+    
+    def _id(self):
+        result = ''
+        while self.current_char is not None and self.current_char.isalnum():
+            result += self.current_char
+            self.advance()
+        token = RESERVED_KEYWORDS.get(result, Token(Tokens.ID, result))
+        return token
     
     def integer(self):
         result = ''
@@ -53,5 +73,17 @@ class Lexer:
             if self.current_char == ')':
                 self.advance()
                 return Token(Tokens.RPAREN, ')')
+            if self.current_char.isalpha():
+                return self._id()
+            if self.current_char == ':' and self.peek() == '=':
+                self.advance()
+                self.advance()
+                return Token(Tokens.ASSIGN, ':=')
+            if self.current_char == ';':
+                self.advance()
+                return Token(Tokens.SEMI, ';');
+            if self.current_char == '.':
+                self.advance()
+                return Token(Tokens.DOT, '.')
             self.error()
         return Token(Tokens.EOF, None)

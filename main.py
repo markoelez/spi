@@ -1,21 +1,17 @@
+import sys
 from lexer import Lexer
 from parser import Parser
 from interpreter import Interpreter
 
 
 def main():
-    while 1:
-        try:
-            text = input('spi::> ')
-        except EOFError:
-            break
-        if not text:
-            continue
-        lexer = Lexer(text)
-        parser = Parser(lexer)
-        interpreter = Interpreter(parser)
-        result = interpreter.interpret()
-        print(result)
+    text = open(sys.argv[1], 'r').read()
+    
+    lexer = Lexer(text)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser)
+    result = interpreter.interpret()
+    print(interpreter.GLOBAL_SCOPE)
 
 if __name__ == '__main__':
     main()
